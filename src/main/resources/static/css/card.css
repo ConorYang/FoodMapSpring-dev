@@ -1,0 +1,138 @@
+/* body 只作垂直排列 */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f0e6;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* header / main / footer 垂直排列 */
+  min-height: 100vh;
+}
+
+/* 主要內容區 */
+.main-container {
+  flex: 1; /* 撐滿剩餘高度，footer 自然在底部 */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平置中內容 */
+  justify-content: flex-start;
+  padding: 100px 40px 60px 40px; /* 上下內距 */
+  box-sizing: border-box;
+}
+
+/* 卡片容器 */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;        /* 多張卡片自動換行 */
+  justify-content: center; /* 每行卡片水平置中 */
+  gap: 20px;              /* 卡片間距 */
+  max-width: 1000px;      /* 可選：限制容器最大寬度 */
+  width: 100%;            /* 讓容器填滿父元素 */
+}
+
+/* 卡片 */
+.card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  background: mediumturquoise;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  color: black;
+  overflow: hidden;
+  transition: all 0.5s;
+  text-align: center;
+}
+
+/* 正面文字 */
+.card .front-text {
+  position: relative;
+  z-index: 2;
+  transition: opacity 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card .front-text i {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+/* 背面文字 */
+.card .back-text {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  padding: 15px;
+  font-size: 18px;
+  line-height: 1.4;
+  transition: opacity 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card .back-text i {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+/* 角落展開效果 */
+.card::before,
+.card::after {
+  position: absolute;
+  content: "";
+  width: 20%;
+  height: 20%;
+  background-color: lightblue;
+  transition: all 0.5s;
+  z-index: 1;
+}
+
+.card::before {
+  top: 0;
+  right: 0;
+  border-radius: 0 15px 0 100%;
+}
+
+.card::after {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 15px;
+}
+
+.card:hover::before,
+.card:hover::after {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+/* Hover 狀態切換文字 */
+.card:hover .front-text {
+  opacity: 0;
+}
+
+.card:hover .back-text {
+  opacity: 1;
+}
+
+/* 點擊彈跳效果 */
+.card:active {
+  animation: bounce 0.3s ease;
+}
+
+@keyframes bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.92); }
+  60%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

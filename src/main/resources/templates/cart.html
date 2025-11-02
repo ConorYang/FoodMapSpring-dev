@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的購物車</title>
+</head>
+<body>
+    <h1>我的購物車</h1>
+    <a th:href="@{/shop/products}">返回商品列表</a> |
+    <a th:href="@{/shop/checkout}">進入結帳流程</a>
+
+    <p th:if="${message}" style="color: green;" th:text="${message}"></p>
+    <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
+    <div th:if="${cartItems.isEmpty()}">
+        <p>購物車中沒有商品。</p>
+    </div>
+
+    <table th:unless="${cartItems.isEmpty()}" border="1">
+        <thead>
+            <tr>
+                <th>商品名稱</th>
+                <th>單價</th>
+                <th>數量</th>
+                <th>小計</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.product.productName}"></td>
+                <td th:text="${item.product.unitPrice}"></td>
+                <td>
+                    <form th:action="@{/shop/update-cart}" method="post" style="display: inline;">
+                        <input type="hidden" name="productID" th:value="${item.product.productId}" /> 
+                        <input type="number" name="quantity" th:value="${item.quantity}" min="0" style="width: 50px;" />
+                        <button type="submit">更新數量</button>
+                    </form>
+                </td>
+                <td th:text="${item.product.unitPrice * item.quantity}"></td>
+                <td>
+                    <form th:action="@{/shop/update-cart}" method="post" style="display: inline;">
+                        <input type="hidden" name="productID" th:value="${item.product.productId}" /> 
+                        <input type="hidden" name="quantity" value="0" />
+                        <button type="submit">刪除</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">總計</td>
+                <td th:text="${totalPrice}"></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>

@@ -1,0 +1,77 @@
+.nav-item.dropdown .dropdown-toggle::after {
+    display: none; /* 隱藏箭頭 */
+}
+
+/* 下拉選單初始狀態 */
+.nav-item.dropdown .dropdown-menu {
+    display: block;          /* 保留在 DOM */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    min-width: 0;        /* 移除預設最小寬度 */
+    width: auto;         /* 寬度自動 */
+    white-space: nowrap; /* 避免換行 */
+    padding: 0.25rem 0;  /* 可自行調整上下間距 */
+    background-color: #f5e6d2;
+    border: 1px solid #e0c2a6;
+    border-radius: 6px;
+    padding: 5px 0;
+    z-index: 999;
+}
+
+/* 下拉項目 */
+.nav-item.dropdown .dropdown-item {
+
+    padding: 8px 20px;
+    transition: background 0.3s;
+}
+
+.nav-item.dropdown .dropdown-item:hover {
+    background-color: #d9b382;
+    color: #000;
+}
+header, .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* 依你實際高度調整 */
+  z-index: 9999; /* 足夠大，確保永遠在最上層 */
+  background-color: var(--white-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Search Bar 與 header 同步 */
+.header-search {
+  flex: 1;               /* 撐滿中間 */
+  max-width: 1000px;      /* 可以調整最大寬度 */
+  margin: 0 20px;        /* 左右間距 */
+  position: relative;
+}
+
+.header-search .form-control {
+  width: 100%;
+  padding-left: 40px;   /* 給 icon 留位置 */
+}
+
+/* Search icon */
+.header-search span {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: var(--p-color);
+}
+
+/* 響應式縮放 */
+@media screen and (max-width: 767px) {
+  .header-search {
+    max-width: 100%;
+    margin: 0 10px;
+  }
+}

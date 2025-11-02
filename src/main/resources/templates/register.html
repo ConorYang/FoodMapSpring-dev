@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會員註冊</title>
+
+</head>
+<link rel="stylesheet" th:href="@{/css/hamsterR.css}" />
+<body class="d-flex flex-column min-vh-100">
+
+<!-- 全域 Loader -->
+<div id="loader-wrapper">
+    <div class="loader"></div>
+    <div class="loader-text">Loading...</div>
+</div>
+	<!-- Header -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<!-- 動畫區塊 -->
+	<div class="d-flex justify-content-center mt" >
+		<div aria-label="Orange and tan hamster running in a metal wheel"
+			role="img" class="wheel-and-hamster">
+			<div class="wheel">
+				<div class="hamster-wrapper">
+					<div class="hamster">
+						<div class="hamster__body">
+							<div class="hamster__head">
+								<div class="hamster__ear"></div>
+								<div class="hamster__eye"></div>
+								<div class="hamster__nose"></div>
+							</div>
+							<div class="hamster__limb hamster__limb--fr"></div>
+							<div class="hamster__limb hamster__limb--fl"></div>
+							<div class="hamster__limb hamster__limb--br"></div>
+							<div class="hamster__limb hamster__limb--bl"></div>
+							<div class="hamster__tail"></div>
+						</div>
+					</div>
+				</div>
+				<div class="spoke"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 註冊表單 -->
+	<div
+		class="d-flex justify-content-center align-items-center flex-grow-1">
+		<div class="login-box">
+			<p id="registerTitle">會員註冊</p>
+
+
+
+			<!-- 選擇角色 -->
+			<div class="user-box mb-3">
+				<div class="d-flex justify-content-center" id="roleSelector">
+					<!-- 會員 -->
+					<div class="role-card text-center" data-role="2">
+						<i class="bi bi-person-add display-6"></i>
+						<div>會員</div>
+					</div>
+
+					<div class="role-card text-center" data-role="3">
+						<i class="bi bi-shop display-6"></i>
+						<div>廠商</div>
+					</div>
+
+					<!--    <div class="role-card text-center p-2 border rounded" data-role="1"> -->
+					<!--   <i class="bi bi-shield-lock-fill display-4"></i> -->
+					<!--  <div>管理員</div> -->
+					<!--  </div> -->
+				</div>
+				<!-- 隱藏 input 存選中的 roleId -->
+				<input type="hidden" id="roleId" value="2">
+			</div>
+
+
+
+			<!-- 訊息提示 -->
+			<div id="registerMsg" class="alert d-none"></div>
+
+			<div class="user-box">
+				<input type="email" id="account" required /> <label for="account">帳號
+					(Email)</label>
+			</div>
+
+			<div class="user-box">
+				<input type="password" id="password" required /> <label
+					for="password">密碼</label>
+			</div>
+
+
+			<!-- 註冊按鈕 -->
+			<button id="registerBtn" class="btn-login w-100">
+				<span></span><span></span><span></span><span></span> 註冊
+			</button>
+
+			<p class="mt-3">
+				<a th:href="@{/login}" class="a2">已有帳號? 登入</a>
+			</p>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div th:replace="~{fragments/footer :: footer}"></div>
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- title 文字變動 -->
+
+	<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const roleCards = document.querySelectorAll("#roleSelector .role-card");
+    const roleIdInput = document.getElementById("roleId");
+    const registerTitle = document.getElementById("registerTitle");
+
+    roleCards.forEach(card => {
+        card.addEventListener("click", function () {
+            // 取消其他選中
+            roleCards.forEach(c => c.classList.remove("active"));
+            // 選中自己
+            this.classList.add("active");
+
+            // 更新隱藏 input
+            roleIdInput.value = this.dataset.role;
+
+            // 更新標題文字
+            if (this.dataset.role === "2") {
+                registerTitle.textContent = "會員註冊";
+            } else if (this.dataset.role === "3") {
+                registerTitle.textContent = "廠商註冊";
+            }
+        });
+    });
+});
+</script>
+
+
+<!-- Ajax 註冊 + 角色選擇 -->
+<script>
+$(document).ready(function() {
+    // 預設選中會員
+    $("#roleSelector .role-card[data-role='2']").addClass("selected");
+
+    // 角色選擇點擊事件
+    $("#roleSelector .role-card").click(function() {
+        $("#roleSelector .role-card").removeClass("selected");
+        $(this).addClass("selected");
+        $("#roleId").val($(this).data("role"));
+    });
+
+    // 註冊按鈕點擊事件
+    $("#registerBtn").click(function() {
+        const btn = $(this);
+        btn.prop("disabled", true);
+
+        const account = $("#account").val();
+        const password = $("#password").val();
+
+        // 前端簡單驗證
+        if (!account.includes("@")) {
+            showMsg("請輸入有效 Email", "danger");
+            btn.prop("disabled", false);
+            return;
+        }
+        if (password.length < 6) {
+            showMsg("密碼至少 6 碼", "danger");
+            btn.prop("disabled", false);
+            return;
+        }
+
+        const data = {
+            account: account,
+            password: password,
+            roleId: $("#roleId").val()
+        };
+
+        $.ajax({
+            url: "/api/register",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(res) {
+                if(res.success) {
+                    // 顯示驗證提醒訊息
+                    showMsg("success");
+
+                    // 清空輸入欄位
+                    $("#account, #password").val("");
+
+             
+                } else {
+                    showMsg(res.message, "danger");
+                }
+            },
+            error: function() {
+                showMsg("伺服器錯誤，請稍後再試", "danger");
+            },
+            complete: function() {
+                btn.prop("disabled", false);
+            }
+        });
+    });
+
+ 
+    function showMsg(msg, type) {
+        $("#registerMsg").removeClass("d-none alert-success alert-danger")
+                         .addClass("alert-" + type)
+                         .text(msg);
+    }
+});
+</script>
+
+
+
+</body>
+</html>

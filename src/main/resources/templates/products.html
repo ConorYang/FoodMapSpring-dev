@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+</head>
+<body>
+    <h1>商品列表</h1>
+    <a th:href="@{/shop/cart}">檢視購物車</a>
+
+    <p th:if="${message}" style="color: green;" th:text="${message}"></p>
+    <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
+    <div th:each="product : ${products}" 
+         style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+        <h2 th:text="${product.productName}">商品名稱</h2>
+        <p>價格: <span th:text="${product.unitPrice}">1000</span> NTD</p>
+        <p>庫存: <span th:text="${product.stock}">5</span></p>
+
+        <form th:action="@{/shop/add-to-cart}" method="post">
+            <!-- ⚠️ 這裡要用 product.productID (大寫 ID) -->
+            <input type="hidden" name="productID" th:value="${product.productId}" />
+            <input type="number" name="quantity" value="1" min="1" max="50" style="width: 50px;" />
+            <button type="submit">加入購物車</button>
+        </form>
+    </div>
+</body>
+</html>

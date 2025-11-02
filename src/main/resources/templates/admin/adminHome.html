@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8">
+<title>User Profile</title>
+
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+<!-- 全域 Loader -->
+  <div id="loader-wrapper">
+      <div class="loader"></div>
+  </div>
+  
+  	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="d-flex flex-row flex-nowrap  min-vh-200">
+
+			<!-- Sidebar -->
+			<nav id="sidebarMenu" class="sidebar bg-light collapse show">
+				<ul class="nav flex-column py-4">
+					<li class="nav-item"><a class="nav-link active"
+						th:href="@{/memberHome}"> <i class="bi-person-fill me-2"></i>會員資料
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/member/profile}"> <i class="bi-gear me-2"></i>會員設定
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/wallet}">
+							<i class="bi-wallet me-2"></i>訂單紀錄
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/wallet}">
+							<i class="bi-fork-knife me-2"></i>訂位紀錄
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"> <i
+							class="bi-cart-plus me-2"></i>購物車
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"> <i
+							class="bi-search me-2"></i>瀏覽紀錄
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"> <i
+							class="bi-messenger me-2"></i>評論紀錄
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"> <i
+							class="bi-search-heart me-2"></i>我的收藏
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="help-center.html"> <i class="bi-question-circle me-2"></i>客服中心
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"> <i
+							class="bi-house me-2"></i>回首頁
+					</a></li>
+					<li class="nav-item border-top mt-auto pt-1"><a
+						class="nav-link" th:href="@{/logout}"> <i
+							class="bi-box-arrow-left me-1"></i> Logout
+					</a></li>
+				</ul>
+			</nav>
+
+			<!-- Main content -->
+			<main class="main-content">
+				<div class="title-group mb-3">
+					<h1 class="h2 mb-0">Profile</h1>
+				</div>
+
+				<div class="row my-4">
+					<!-- Left Column: User Info -->
+					<div class="col-lg-7 col-12">
+						<!-- General Info -->
+						<div class="custom-block custom-block-profile">
+							<div class="row">
+								<div class="col-lg-12 col-12 mb-3">
+									<h6>General</h6>
+								</div>
+
+								<div class="col-lg-3 col-12 mb-4 mb-lg-0">
+									<div class="custom-block-profile-image-wrap">
+										<img
+											th:src="${member != null and member.avatarURL != null} ? @{/uploads/avatars/{file}(file=${member.avatarURL})} : @{/images/default-avatar.png}"
+											id="avatarPreview" width="120" height="120"
+											class="rounded-circle mb-2" style="object-fit: cover;">
+										<a th:href="@{/member/profile}"
+											class="bi-pencil-square custom-block-edit-icon"></a>
+									</div>
+								</div>
+
+								<div class="col-lg-9 col-12">
+									<p class="d-flex flex-wrap mb-2">
+										<strong>Name:</strong> <span
+											th:text="${member?.userName ?: '未設定'}">使用者名稱</span>
+									</p>
+									<p class="d-flex flex-wrap mb-2">
+										<strong>Email:</strong> <a href="#"
+											th:text="${user?.account ?: '未設定'}">user@email.com</a>
+									</p>
+									<p class="d-flex flex-wrap mb-2">
+										<strong>Phone:</strong> <span
+											th:text="${member?.phone ?: '未填'}">(09) 1234 5678</span>
+									</p>
+									<p class="d-flex flex-wrap mb-2">
+										<strong>Birthday:</strong> <span
+											th:text="${member?.birthdate != null ? #temporals.format(member.birthdate, 'yyyy-MM-dd') : '未填'}">1990-01-01</span>
+									</p>
+									<p class="d-flex flex-wrap">
+										<strong>Location:</strong> <span
+											th:text="${(member?.city ?: '') + ' ' + (member?.district ?: '')}">台北市
+											大安區</span>
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Account Info -->
+						<div class="custom-block custom-block-profile bg-white mt-4">
+							<h6 class="mb-4">Account Information</h6>
+							<p class="d-flex flex-wrap mb-2">
+								<strong>Account ID:</strong> <span
+									th:text="${user?.accountId ?: '未知'}">12345</span>
+							</p>
+							<!--                         Thymeleaf 3 針對 Java 8 Date/Time API（LocalDateTime、LocalDate、Instant …）提供了 #temporals 工具 -->
+							<p class="d-flex flex-wrap mb-2">
+								<strong>Created:</strong> <span
+									th:text="${user?.createdAt != null ? #temporals.format(user.createdAt, 'yyyy-MM-dd') : '未知'}">2020-01-01</span>
+							</p>
+							<p class="d-flex flex-wrap mb-2">
+								<strong>LastLogIn:</strong> <span
+									th:text="${user?.lastLogIn != null ? #temporals.format(user.lastLogIn, 'yyyy-MM-dd') : '未知'}">2020-01-01</span>
+							</p>
+						</div>
+					</div>
+
+					<!-- Right Column: Contact / Help -->
+					<div class="col-lg-5 col-12">
+						<div class="custom-block custom-block-contact">
+							<h6 class="mb-4">Need Help?</h6>
+							<p>
+								<strong>客服專線:</strong> <a href="tel:3052409671" class="ms-2">(60)
+									305-240-9671</a>
+							</p>
+							<a href="#" class="btn custom-btn custom-btn-bg-white mt-3">聯繫客服</a>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+
+
+	<!-- JAVASCRIPT FILES -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/custom.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>確認訂單資訊</title>
+</head>
+<body>
+    <h1>確認訂單資訊 (J)</h1>
+    <h2>訂單內容</h2>
+    <table border="1">
+        </table>
+    
+    <a th:href="@{/shop/cart}">返回購物車修改 (L)</a>
+
+    <form th:action="@{/shop/confirm}" method="post" style="margin-top: 20px;">
+        <p>請確認以上訂單內容和收件資訊是否正確。</p>
+        <button type="submit">確認無誤，提交訂單 (K->M)</button>
+    </form>
+</body>
+</html>

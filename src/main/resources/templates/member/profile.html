@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-Hant" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mini Finance - 編輯個人資料</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container-fluid">
+        <div class="d-flex flex-row flex-nowrap">
+            <!-- 側邊欄 -->
+            <nav id="sidebarMenu" class="sidebar bg-light collapse show">
+                <ul class="nav flex-column h-100">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/member/memberHome}">
+                            <i class="bi-house-fill me-2"></i> Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/member/profile}">
+                            <i class="bi-gear me-2"></i> 會員設定
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/wallet}">
+                            <i class="bi-wallet me-2"></i> 訂單紀錄
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/wallet}">
+                            <i class="bi-fork-knife me-2"></i> 訂位紀錄
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi-cart-plus me-2"></i> 購物車
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi-search me-2"></i> 瀏覽紀錄
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi-messenger me-2"></i> 評論紀錄
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi-search-heart me-2"></i> 我的收藏
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help-center.html">
+                            <i class="bi-question-circle me-2"></i> 客服中心
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi-house me-2"></i> 回首頁
+                        </a>
+                    </li>
+                    <li class="nav-item border-top mt-auto pt-2">
+                        <a class="nav-link" th:href="@{/logout}">
+                            <i class="bi-box-arrow-left me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 主要內容 -->
+            <main class="main-content">
+                <div class="title-group mb-3">
+                    <h1 class="h2 mb-0">Setting</h1>
+                </div>
+
+                <div class="row my-4">
+                    <!-- 左側表單 -->
+                    <div class="col-lg-7 col-12">
+                        <div class="custom-block bg-white">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="profile-tab"
+                                        data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+                                        type="button" role="tab" aria-controls="profile-tab-pane"
+                                        aria-selected="true">Profile</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="password-tab" data-bs-toggle="tab"
+                                        data-bs-target="#password-tab-pane" type="button" role="tab"
+                                        aria-controls="password-tab-pane" aria-selected="false">Password</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="notification-tab"
+                                        data-bs-toggle="tab" data-bs-target="#notification-tab-pane"
+                                        type="button" role="tab" aria-controls="notification-tab-pane"
+                                        aria-selected="false">Notification</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Profile Tab -->
+                                <div class="tab-pane fade show active" id="profile-tab-pane"
+                                    role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                    <h6 class="mb-4">User Profile</h6>
+
+                                    <form class="custom-form profile-form"
+                                        th:action="@{/member/update}" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="memberId" th:value="${member.memberId}" />
+                                        <input type="hidden" name="accountId" th:value="${member.user.accountId}" />
+
+                                        <!-- 頭像 -->
+                                        <div class="mb-3 text-center">
+                                            <img th:src="${member.avatarURL != null} ? @{/uploads/avatars/{file}(file=${member.avatarURL})} : @{/images/default-avatar.png}"
+                                                 id="avatarPreview" width="120" height="120"
+                                                 class="rounded-circle mb-2" style="object-fit: cover;">
+                                            <input type="file" class="form-control mt-2"
+                                                   name="avatarFile" id="avatarFileInput" accept="image/*"
+                                                   onchange="previewImage(this)">
+                                            <small class="text-muted d-block mt-2">最大1MB，支援 .PNG, .JPEG</small>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">姓名</label>
+                                            <input type="text" class="form-control" name="userName"
+                                                   th:value="${member.userName}" required />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label d-block">性別</label>
+                                            <div>
+                                                <input type="radio" name="gender" value="男"
+                                                       th:checked="${member.gender == '男' or member.gender == null}"> 男
+                                                <input type="radio" name="gender" value="女"
+                                                       th:checked="${member.gender == '女'}"> 女
+                                                <input type="radio" name="gender" value="其他"
+                                                       th:checked="${member.gender != '男' and member.gender != '女'}"> 其他
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">生日</label>
+                                            <input type="date" class="form-control" name="birthdate"
+                                                   th:value="${member.birthdate != null} ? ${#temporals.format(member.birthdate,'yyyy-MM-dd')} : ''">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">電話</label>
+                                            <input type="tel" class="form-control" name="phone"
+                                                   th:value="${member.phone}" pattern="^09\d{8}$" maxlength="10"
+                                                   placeholder="請輸入手機號碼，例如：0912345678" required />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">城市</label>
+                                            <input type="text" class="form-control" name="city" th:value="${member.city}" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">區域</label>
+                                            <input type="text" class="form-control" name="district" th:value="${member.district}" />
+                                        </div>
+
+                                        <div class="d-flex">
+                                            <button type="button" class="form-control me-3">
+                                                Reset
+                                            </button>
+
+                                            <button type="submit" class="form-control ms-2">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Password Tab -->
+                                <div class="tab-pane fade" id="password-tab-pane"
+                                    role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                                    <h6 class="mb-4">Password</h6>
+                                    <form class="custom-form password-form"
+                                          th:action="@{/user/changePassword}" method="post">
+                                        <input type="password" name="password" class="form-control mb-2"
+                                               placeholder="Current Password" required>
+                                        <input type="password" name="newPassword" class="form-control mb-2"
+                                               placeholder="New Password" required>
+                                        <input type="password" name="confirmPassword" class="form-control mb-3"
+                                               placeholder="Confirm Password" required>
+                                        <div class="d-flex">
+                                            <button type="reset" class="form-control me-3">Reset</button>
+                                            <button type="submit" class="form-control ms-2">Update Password</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Notification Tab -->
+                                <div class="tab-pane fade" id="notification-tab-pane"
+                                    role="tabpanel" aria-labelledby="notification-tab" tabindex="0">
+                                    <h6 class="mb-4">Notification</h6>
+                                    <form class="custom-form notification-form" action="#" method="post">
+                                        <div class="form-check form-switch d-flex mb-3 ps-0">
+                                            <label class="form-check-label">Account activity</label>
+                                            <input class="form-check-input ms-auto" type="checkbox" checked>
+                                        </div>
+                                        <div class="form-check form-switch d-flex mb-3 ps-0">
+                                            <label class="form-check-label">Payment updated</label>
+                                            <input class="form-check-input ms-auto" type="checkbox" checked>
+                                        </div>
+                                        <div class="d-flex">
+                                            <button type="reset" class="form-control me-3">Reset</button>
+                                            <button type="submit" class="form-control ms-2">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右側 Help -->
+                    <div class="col-lg-5 col-12">
+                        <div class="custom-block custom-block-contact">
+                            <h6 class="mb-4">Need Help?</h6>
+                            <p>
+                                <strong>客服專線:</strong>
+                                <a href="tel:3052409671" class="ms-2">(60) 305-240-9671</a>
+                            </p>
+                            <a href="#" class="btn custom-btn custom-btn-bg-white mt-3">聯繫客服</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div th:replace="~{fragments/footer :: footer}"></div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

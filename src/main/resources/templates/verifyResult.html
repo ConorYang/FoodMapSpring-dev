@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>驗證結果</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- 訊息區塊 -->
+<div class="d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="login-box">
+        <div th:if="${success}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${!success}" class="alert alert-danger" th:text="${message}"></div>
+
+        <a th:href="@{/login}" class="btn-login w-100 mt-3">
+            <span></span><span></span><span></span><span></span> 回登入頁
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<div th:fragment="settingsForm" class="settings-card">
+    <form id="memberSettingsForm" th:object="${member}" enctype="multipart/form-data">
+
+        <!-- 頭像 -->
+        <div class="mb-3 text-center">
+            <img th:src="${member.avatarURL != null} ? @{/uploads/avatars/{file}(file=${member.avatarURL})} : @{/images/default-avatar.png}"
+                 id="avatarPreview" class="mb-2" />
+            <input type="file" class="form-control mt-2" name="avatarFile" id="avatarFileInput" accept="image/*"
+                   onchange="previewImage(this)">
+            <small class="text-muted d-block mt-2">最大1MB，支援 .PNG, .JPEG</small>
+        </div>
+
+        <!-- 姓名 -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">姓名</label>
+            <input type="text" class="form-control" th:field="*{userName}" placeholder="姓名" required />
+        </div>
+
+        <!-- 性別 -->
+        <div class="mb-3 gender-options">
+            <label class="form-label fw-semibold text-secondary d-block">性別</label>
+            <div class="d-flex">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender-male" th:value="'男'" th:checked="${member?.gender == '男' or member?.gender == null}">
+                    <label class="form-check-label" for="gender-male">男</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender-female" th:value="'女'" th:checked="${member?.gender == '女'}">
+                    <label class="form-check-label" for="gender-female">女</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender-other" th:value="'其他'" th:checked="${member?.gender != '男' and member?.gender != '女'}">
+                    <label class="form-check-label" for="gender-other">其他</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生日 -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">生日</label>
+            <input type="date" class="form-control"
+                   th:value="${member.birthdate != null} ? ${#temporals.format(member.birthdate,'yyyy-MM-dd')} : ''"
+                   name="birthdate" id="birthdate">
+        </div>
+
+        <!-- 電話 -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">電話</label>
+            <input type="tel" class="form-control" inputmode="numeric" pattern="^09\d{8}$"
+                   maxlength="10" placeholder="0912345678" th:field="*{phone}"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
+
+        <!-- 城市 -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">城市</label>
+            <input type="text" class="form-control" th:field="*{city}">
+        </div>
+
+        <!-- 區域 -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">區域</label>
+            <input type="text" class="form-control" th:field="*{district}">
+        </div>
+
+        <!-- 表單按鈕 -->
+        <div class="form-actions">
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-success">Update</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,126 @@
+<div th:fragment="sidebar">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+        <div class="position-sticky py-4 px-3 sidebar-sticky">
+            <ul class="nav flex-column h-100">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/memberHome}">
+                        <i class="bi-house-fill me-2"></i> Overview
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/profile}">
+                        <i class="bi-person me-2"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="openSetting" href="#">
+                        <i class="bi-gear me-2"></i> Setting
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="wallet.html">
+                        <i class="bi-wallet me-2"></i> My Wallet
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="help-center.html">
+                        <i class="bi-question-circle me-2"></i> Help Center
+                    </a>
+                </li>
+                <li class="nav-item border-top mt-auto pt-2">
+                    <a class="nav-link" th:href="@{/logout}">
+                        <i class="bi-box-arrow-left me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<!-- 右側滑出設定側欄 -->
+<div id="memberSetting">
+    <button class="close-btn">&times;</button>
+    <div id="settingContent">
+        <!-- AJAX 載入會員設定表單 -->
+    </div>
+</div>
+
+<!-- CSS for sliding sidebar -->
+<style>
+    #memberSetting {
+        position: fixed;
+        top: 70px; /* 依 header 高度調整 */
+        right: 20px; /* 往左推一點，不貼齊邊 */
+        width: 450px; /* 增加寬度 */
+        height: calc(100% - 70px); /* 扣掉 header 高度 */
+        background: #fff;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1050;
+        overflow: auto;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        border-radius: 8px; /* 可選，增加圓角感 */
+    }
+
+    #memberSetting.show {
+        transform: translateX(0);
+    }
+
+    #memberSetting .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+</style>
+
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<script>
+$(document).ready(function () {
+    // 點擊 Setting 開啟側欄並載入 fragment
+    $(document).on('click', '#openSetting', function (e) {
+        e.preventDefault(); // 阻止跳頁
+        console.log("[DEBUG] openSetting clicked");
+
+        $.get('/member/setting')
+            .done(function (data) {
+                console.log("[DEBUG] GET /member/setting success", data);
+                $('#settingContent').html(data);
+                $('#memberSetting').addClass('show');
+            })
+            .fail(function (xhr, status, error) {
+                console.error("[DEBUG] GET /member/setting failed", status, error);
+                alert("Failed to load member settings");
+            });
+    });
+
+    // 表單 submit 事件
+    $(document).on('submit', '#memberSettingsForm', function (e) {
+        e.preventDefault();
+        console.log("[DEBUG] memberSettingsForm submit", $(this).serialize());
+
+        $.post('/member/setting/update', $(this).serialize())
+            .done(function (resp) {
+                console.log("[DEBUG] Update success", resp);
+                alert("Settings updated!");
+                $('#memberSetting').removeClass('show');
+            })
+            .fail(function (err) {
+                console.error("[DEBUG] Update failed", err);
+                alert("Update failed");
+            });
+    });
+
+    // 關閉側欄
+    $(document).on('click', '#memberSetting .close-btn', function () {
+        console.log("[DEBUG] Close button clicked");
+        $('#memberSetting').removeClass('show');
+    });
+});
+</script>

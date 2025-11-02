@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="UTF-8">
+<title>會員登入</title>
+
+</head>
+    <link rel="stylesheet" th:href="@{/css/hamster.css}" />
+    
+<body class="d-flex flex-column min-vh-100">
+<!-- 全域 Loader -->
+<div id="loader-wrapper">
+    <div class="loader"></div>
+    <div class="loader-text">Loading...</div>
+</div>
+
+	<!-- Header -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<!-- 動畫區塊 -->
+	<div class="d-flex justify-content-center mb-3">
+		<div aria-label="Orange and tan hamster running in a metal wheel"
+			role="img" class="wheel-and-hamster">
+			<div class="wheel"></div>
+
+			<div class="hamster">
+				<div class="hamster__body">
+					<div class="hamster__head">
+						<div class="hamster__ear"></div>
+						<div class="hamster__eye"></div>
+						<div class="hamster__nose"></div>
+					</div>
+					<div class="hamster__limb hamster__limb--fr"></div>
+					<div class="hamster__limb hamster__limb--fl"></div>
+					<div class="hamster__limb hamster__limb--br"></div>
+					<div class="hamster__limb hamster__limb--bl"></div>
+					<div class="hamster__tail"></div>
+				</div>
+			</div>
+			<div class="spoke"></div>
+		</div>
+	</div>
+
+	<!-- 登入表單 -->
+	<div
+		class="d-flex justify-content-center align-items-center flex-grow-1">
+		<div class="login-box">
+			<p>Login</p>
+
+			<div class="user-box" style="position: relative;">
+				<input type="text" id="loginAccount" required> <label
+					for="loginAccount">帳號(Email)</label>
+			</div>
+
+			<div class="user-box" style="position: relative;">
+				<input type="password" id="loginPassword" required> <label
+					for="loginPassword">密碼</label>
+			</div>
+
+			<button id="loginBtn" class="btn-login w-100">
+			<span></span><span></span><span></span><span></span>登入
+			</button>
+
+			<p class="mt-3">
+				<a th:href="@{/register}" class="a2">還沒有帳號? 註冊</a>
+			</p>
+		</div>
+	</div>
+	<!-- Footer -->
+<!-- 	<div th:replace="~{fragments/footer :: footer}"></div> -->
+<div th:replace="fragments/footer :: footer"></div>
+	<script>
+$("#loginBtn").click(function () {
+    $.ajax({
+        url: "/api/login",
+        type: "POST",
+        contentType: "application/json",
+        xhrFields: { withCredentials: true }, //避免cookie擋住
+        data: JSON.stringify({
+            account: $("#loginAccount").val(),
+            password: $("#loginPassword").val()
+        }),
+        success: function (res) {
+            if (res.success) {
+                $("#loginMsg").text(res.message).css("color", "green");
+
+                setTimeout(() => {
+                    // 根據角色導向不同頁面
+                    if (res.roleId == 2 && res.memberId) {
+                        // 會員
+                        window.location.href = "/member/memberHome";
+                    } else if (res.roleId == 3 && res.vendorId) {
+                        // 廠商
+                        window.location.href = "/vendor/vendorHome";
+                    } else if (res.roleId == 1) {
+                        // 管理員
+                        window.location.href = "/admin/adminHome";
+                    } else {
+                        // 其他或預設頁
+                        window.location.href = "/";
+                    }
+                }, 1000);
+            } else {
+                $("#loginMsg").text(res.message).css("color", "red");
+            }
+        },
+        error: function () {
+            $("#loginMsg").text("伺服器錯誤，請稍後再試").css("color", "red");
+        }
+    });
+});
+</script>
+
+</body>
+
+</html>

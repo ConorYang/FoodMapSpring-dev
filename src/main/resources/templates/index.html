@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-Hant">
+
+<head th:replace="fragments/head :: head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>美食地圖</title>
+<!-- --- -->
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .food-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-in-out;
+        }
+        .food-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .navbar-shrink {
+            padding-top: 0.3rem !important;
+            padding-bottom: 0.3rem !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease-in-out;
+        }
+        /* Hero 區背景圖 */
+        .hero {
+            background: url('https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg') center/cover no-repeat;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero text-center py-5">
+        <div class="container">
+            <h1 class="display-5 fw-bold">探索美味、規劃你的美食之旅</h1>
+            <p class="lead text-muted mt-3">找尋全台最道地的美食，從這裡開始</p>
+        </div>
+    </section>
+
+    <!-- 熱門美食卡片 -->
+    <section class="container my-5">
+        <h2 class="mb-4 fw-bold">熱門景點美食</h2>
+        <div class="row g-4">
+            <!-- 台北小吃 -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm food-card">
+                    <img src="https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg" class="card-img-top" alt="台北小吃">
+                    <div class="card-body">
+                        <h5 class="card-title">台北小吃</h5>
+                        <p class="card-text">精選夜市美食推薦，享受道地台灣味。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 高雄海鮮 -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm food-card">
+                    <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="高雄海鮮">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">高雄海鮮</h5>
+                        <p class="card-text text-muted">新鮮海味直送，品味港邊風情。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 台中甜點 -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm food-card">
+                    <img src="https://images.pexels.com/photos/253580/pexels-photo-253580.jpeg" class="card-img-top" alt="台中甜點">
+                    <div class="card-body">
+                        <h5 class="card-title">台中甜點</h5>
+                        <p class="card-text">甜蜜下午茶，享受慢活時光。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 卡片動畫 -->
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll(".food-card");
+
+    function revealOnScroll() {
+        const triggerBottom = window.innerHeight * 0.85;
+
+        cards.forEach((card, index) => {
+            const cardTop = card.getBoundingClientRect().top;
+
+            if (cardTop < triggerBottom && !card.classList.contains("show")) {
+                // 加上延遲，讓每張卡片依序進場
+                setTimeout(() => {
+                    card.classList.add("show");
+                }, index * 350); // 每張卡延遲 200ms
+            }
+        });
+    }
+
+    revealOnScroll();
+    window.addEventListener("scroll", revealOnScroll);
+});
+</script>
+</body>
+</html>

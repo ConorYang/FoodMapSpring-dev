@@ -1,0 +1,105 @@
+<!-- Header -->
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi-box"></i> 美食地圖
+            </a>
+
+            <!-- Search Box -->
+            <form class="header-search d-flex position-relative" action="#" method="get">
+                <input class="form-control ps-5" name="search" type="text" placeholder="Search">
+                <span class="position-absolute top-50 start-0 translate-middle-y ps-3">
+                    <i class="bi bi-search"></i>
+                </span>
+            </form>
+
+            <!-- Hamburger -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Right Menu -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link py-1" th:href="@{/}">
+                            <i class="bi bi-house-door-fill me-1"></i>首頁
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-1" th:href="@{/about}">
+                            <i class="bi bi-shop me-1"></i>夜市介紹
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-1" th:href="@{/contact}">
+                            <i class="bi bi-envelope-fill me-1"></i>聯絡我們
+                        </a>
+                    </li>
+
+                    <!-- 登入/註冊 / 使用者選單 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle py-1" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <!-- 未登入 -->
+                          <span th:if="${member != null}" th:text="${member.userName}">使用者名稱</span>
+                          <span th:unless="${member != null}">訪客</span>	
+                            <!-- 會員 -->
+                             <!-- 顯示角色 -->
+                             
+				       <small class="text-muted" th:if="${session.user != null}">
+				           <!-- 管理員 -->
+				           <span th:if="${session.user.userType.id == 1}">(管理員)</span>
+				           <!-- 會員 -->
+				           <span th:if="${session.user.userType.id == 2}">(會員)</span>
+				           <!-- 廠商 -->
+				           <span th:if="${session.user.userType.id == 3}">(廠商)</span>
+				       </small>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <!-- 未登入 -->
+                            <li th:if="${session.user == null}">
+                                <a class="dropdown-item" th:href="@{/register}">註冊</a>
+                            </li>
+                            <li th:if="${session.user == null}">
+                                <a class="dropdown-item" th:href="@{/login}">登入</a>
+                            </li>
+
+                            <!-- 已登入 (會員) -->
+                            <li th:if="${session.user != null and session.user.userType.id == 2}">
+                                <a class="dropdown-item" th:href="@{/memberHome}">個人資料</a>
+                            </li>
+
+                            <!-- 已登入 (廠商) -->
+                            <li th:if="${session.user != null and session.user.userType.id == 3}">
+                                <a class="dropdown-item" th:href="@{/vendorHome}">廠商後台</a>
+                            </li>
+
+                            <!-- 已登入 (管理員) -->
+                            <li th:if="${session.user != null and session.user.userType.id == 1}">
+                                <a class="dropdown-item" th:href="@{/adminHome}">管理後台</a>
+                            </li>
+
+                            <li th:if="${session.user != null}">
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li th:if="${session.user != null}">
+                                <a class="dropdown-item" th:href="@{/logout}">登出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</div>

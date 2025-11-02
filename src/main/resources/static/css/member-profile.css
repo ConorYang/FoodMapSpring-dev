@@ -1,0 +1,82 @@
+/* ------------------- 側邊欄 ------------------- */
+#memberSetting {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 500px;
+    height: 100%;
+    background: #f8f9ff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1050;
+    overflow: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+#memberSetting.show {
+    transform: translateX(0);
+}
+
+#memberSetting .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-size: 1.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* ------------------- 卡片表單 ------------------- */
+.settings-card {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+/* ------------------- 頭像 ------------------- */
+#avatarPreview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+/* ------------------- 性別選項 ------------------- */
+.gender-options .form-check {
+    margin-right: 15px;
+}
+
+/* ------------------- 表單欄位 ------------------- */
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+/* ------------------- 表單按鈕區 ------------------- */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    width: 48%;
+}
+
+/* ------------------- 表單整體美化 ------------------- */
+.settings-card label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.settings-card input.form-control,
+.settings-card select.form-control {
+    border-radius: 6px;
+}

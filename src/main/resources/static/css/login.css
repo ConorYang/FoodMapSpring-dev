@@ -1,0 +1,223 @@
+/* Login box - 亮色系 */
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    margin: 20px auto;
+    transform: translate(-50%, -55%);
+    background: rgba(245, 230, 210, 0.95);
+    /* 奶茶色背景 */
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(200, 180, 150, 0.4);
+    /* 柔和陰影 */
+    border-radius: 10px;
+    border: thick double #e0c2a6;
+   
+   opacity: 0;  
+  transform: translate(-50%, -65%);   /* 保留置中邏輯，只是初始多上移一點 */
+  animation: fadeInLogin 0.8s ease-out forwards;
+}
+
+
+@keyframes fadeInLogin {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -55%); /* 最後回到原本正中間 */
+  }
+}
+
+
+.login-box p:first-child {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #6b4f3f;
+    /* 深咖啡色文字 */
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.login-box .user-box {
+    position: relative;
+}
+
+.login-box .user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #6b4f3f;
+    /* 深咖啡色文字 */
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #c7a17a;
+    /* 淺棕色底線 */
+    outline: none;
+    background: transparent;
+}
+
+.login-box .user-box label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #a67c52;
+    /* 奶茶色 label */
+    pointer-events: none;
+    transition: .5s;
+}
+
+.login-box .user-box input:focus~label,
+.login-box .user-box input:valid~label {
+    top: -20px;
+    left: 0;
+    color: #8c5e3c;
+    /* 深一點的焦糖色 */
+    font-size: 12px;
+}
+
+/* 登入按鈕 */
+.login-box .btn-login {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-weight: bold;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 10px;
+    letter-spacing: 3px;
+    background: #d9b382;
+    /* 奶茶色按鈕 */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.login-box .btn-login:hover {
+    background: #f08b54;
+    /* 暖色 hover */
+    color: #000000;
+    border-radius: 10px;
+}
+
+.login-box .btn-login span {
+    position: absolute;
+    display: block;
+    background: rgba(109, 65, 65, 0.7);
+    /* 白色半透明線條 */
+}
+
+.login-box .btn-login span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: #f08b54;
+    animation: btn-anim1 3s linear infinite;
+
+}
+
+.login-box .btn-login span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #f08b54;
+    animation: btn-anim2 3s linear infinite;
+}
+
+.login-box .btn-login span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: #f08b54;
+    animation: btn-anim3 3s linear infinite;
+    animation-delay: 1.5s;
+}
+
+.login-box .btn-login span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: #f08b54;
+    animation: btn-anim4 3s linear infinite;
+    animation-delay: 2.25s;
+}
+
+
+@keyframes btn-anim1 {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes btn-anim2 {
+    0% {
+        top: -100%;
+    }
+
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+@keyframes btn-anim3 {
+    0% {
+        right: -100%;
+    }
+
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+@keyframes btn-anim4 {
+    0% {
+        bottom: -100%;
+    }
+
+    50%,
+    100% {
+        bottom: 100%;
+    }
+}
+
+.login-box p:last-child {
+    color: #8c5e3c;
+    /* 深奶茶色文字 */
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-box a.a2 {
+    color: #6b4f3f;
+    text-decoration: none;
+}
+
+.login-box a.a2:hover {
+    color: #000000;
+}
+
+.login-box .btn-login:active {
+    transform: scale(0.8); /* 按下縮小 5% */
+    box-shadow: 0 2px 10px rgba(200, 150, 100, 0.4); /* 陰影變小 */
+}
+.login-box .btn-login {
+    transition: transform 0.1s ease, background-color 0.1s ease, color
+		0.1s ease, border-radius 0.1s ease;
+}
